@@ -33,7 +33,8 @@ case class StatusShow(id: String, reportLocation: VehicleLocation, predicateLoca
     content.append(",")
     content.append(formatter.format(predicateLocation.y))
     content.append(", Direction=>")
-    content.append(formatter.format(direction))
+    content.append(formatter.format(Math.toDegrees(direction)))
+    content.append("°")
 
     content.toString()
   }
