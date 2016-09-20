@@ -1,4 +1,6 @@
-package com.remark.media.exam.controller
+package com.remark.media.exam.main
+
+import com.remark.media.exam.controller.Controller
 
 /**
   * User: 邓思

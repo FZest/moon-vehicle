@@ -11,7 +11,7 @@ import com.typesafe.config.ConfigFactory
   * 地面控制中心
   */
 class Controller {
-  val system = ActorSystem("controller", ConfigFactory.load.getConfig("controller.actor"))
+  val system = ActorSystem("controller", ConfigFactory.load.getConfig("controller.system"))
 
   def start() = {
     system.actorOf(Props[ControllerActor], "controller")
