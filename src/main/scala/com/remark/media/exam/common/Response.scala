@@ -11,4 +11,4 @@ import com.remark.media.exam.common.ResponseCode.ResponseCode
   * @param code 消息code
   * @param msg  附加描述
   */
-case class Response(code: ResponseCode, msg: String)
+case class Response(code: ResponseCode, msg: String = "")

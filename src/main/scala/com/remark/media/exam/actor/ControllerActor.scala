@@ -1,7 +1,7 @@
 package com.remark.media.exam.actor
 
 import akka.actor.Actor
-import com.remark.media.exam.common.LocationUtils
+import com.remark.media.exam.common.{LocationUtils, Response, ResponseCode}
 import com.remark.media.exam.controller.{OperateType, StatusShow}
 import com.remark.media.exam.vehicle.{VehicleLocation, VehicleStatus}
 
@@ -42,6 +42,7 @@ class ControllerActor extends Actor {
       }
 
       queue.enqueue(StatusShow(status.id, status.currentLocation, predicateLocation, direction))
+      sender ! Response(ResponseCode.OK)
     }
 
     // 接收定时调度信号，并打印月球车状态信息
@@ -51,6 +52,6 @@ class ControllerActor extends Actor {
       }
     }
 
-    case _ => "Wrong message type."
+    case _ => sender ! Response(ResponseCode.ERROR, "Wrong message type.")
   }
 }
