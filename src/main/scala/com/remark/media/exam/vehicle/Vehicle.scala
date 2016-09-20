@@ -21,6 +21,7 @@ class Vehicle(statusList: List[VehicleStatus], actor: ActorRef) extends Thread {
     */
   override def run() = {
     statusList.foreach(status => {
+      // 这里是异步调用，暂时不处理来自控制中心的响应
       actor ! status
       Thread.sleep(1000)
 

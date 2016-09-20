@@ -17,7 +17,6 @@ class VehicleActor extends Actor {
 
   override def preStart(): Unit = {
     remoteActor = context.actorSelection("akka.tcp://controller@127.0.0.1:10000/user/controller")
-    println("The remote server address is: " + remoteActor)
   }
 
   override def receive: Receive = {
@@ -27,7 +26,6 @@ class VehicleActor extends Actor {
     }
 
     case response: Response => {
-      println("Receive response from controller: " + response)
       localActor ! response
     }
 
