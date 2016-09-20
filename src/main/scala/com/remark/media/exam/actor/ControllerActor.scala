@@ -3,7 +3,7 @@ package com.remark.media.exam.actor
 import akka.actor.Actor
 import com.remark.media.exam.common.LocationUtils
 import com.remark.media.exam.controller.{OperateType, StatusShow}
-import com.remark.media.exam.vehicle.VehicleStatus
+import com.remark.media.exam.vehicle.{VehicleLocation, VehicleStatus}
 
 import scala.collection.mutable
 
@@ -31,7 +31,15 @@ class ControllerActor extends Actor {
     case status: VehicleStatus => {
       val direction = status.direction + status.steeringAngle
       val moveDistance = status.speed * delaySeconds
-      val predicateLocation = LocationUtils.predictLocation(status.currentLocation, direction, moveDistance)
+      val maxDistance = LocationUtils.calculateDistance(status.currentLocation, status.destLocation)
+
+      var predicateLocation: VehicleLocation = null
+      if (moveDistance >= maxDistance) {
+        // 如果移动后刚好超过目的位置，则月球车应该在目的位置停下来
+        predicateLocation = status.destLocation
+      } else {
+        predicateLocation = LocationUtils.predictLocation(status.currentLocation, direction, moveDistance)
+      }
 
       queue.enqueue(StatusShow(status.id, status.currentLocation, predicateLocation, direction))
     }
