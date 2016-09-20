@@ -4,6 +4,7 @@ import akka.actor.{ActorSystem, Cancellable, Props}
 import com.remark.media.exam.actor.ControllerActor
 import com.typesafe.config.ConfigFactory
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 /**
@@ -13,7 +14,7 @@ import scala.concurrent.duration._
   * 地面控制中心
   */
 class Controller {
-  val system = ActorSystem("controller", ConfigFactory.load.getConfig("controller.system"))
+  val system = ActorSystem("controller", ConfigFactory.parseResources("controller.system"))
 
   var cancellable: Cancellable = null
 

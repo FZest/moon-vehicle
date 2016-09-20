@@ -1,5 +1,8 @@
 package com.remark.media.exam.vehicle
 
+import akka.actor.{ActorSystem, Props}
+import com.remark.media.exam.actor.VehicleActor
+
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
@@ -15,9 +18,10 @@ object VehicleFactory {
     * 从指定配置文件中读取月球车预置线路，并生成月球车对象列表
     *
     * @param filename 配置文件
+    * @param system   actor system
     * @return 月球车对象列表
     */
-  def buildVehicles(filename: String): List[Vehicle] = {
+  def buildVehicles(filename: String, system: ActorSystem): List[Vehicle] = {
     val vehicleList = new ListBuffer[Vehicle]()
     val fileInputStream = this.getClass.getClassLoader.getResourceAsStream(filename)
 
@@ -35,7 +39,7 @@ object VehicleFactory {
         }
       })
 
-      vehicleList.append(new Vehicle(statusList.toList))
+      vehicleList.append(new Vehicle(statusList.toList, system.actorOf(Props[VehicleActor], vehicleId)))
     })
 
     vehicleList.toList

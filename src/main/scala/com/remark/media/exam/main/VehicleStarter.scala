@@ -1,6 +1,8 @@
 package com.remark.media.exam.main
 
+import akka.actor.ActorSystem
 import com.remark.media.exam.vehicle.VehicleFactory
+import com.typesafe.config.ConfigFactory
 
 /**
   * User: 邓思 
@@ -10,7 +12,8 @@ import com.remark.media.exam.vehicle.VehicleFactory
   */
 object VehicleStarter {
   def main(args: Array[String]) {
-    val vehicleList = VehicleFactory.buildVehicles("vehicle.lines")
+    val system = ActorSystem("vehicle", ConfigFactory.parseResources("vehicle.system"))
+    val vehicleList = VehicleFactory.buildVehicles("vehicle.lines", system)
     vehicleList.foreach(vehicle => {
       vehicle.start()
     })

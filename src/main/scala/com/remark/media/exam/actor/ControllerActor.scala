@@ -38,7 +38,9 @@ class ControllerActor extends Actor {
 
     // 接收定时调度信号，并打印月球车状态信息
     case OperateType.PRINT => {
-      println(queue.dequeue())
+      if (!queue.isEmpty) {
+        println(queue.dequeue())
+      }
     }
 
     case _ => "Wrong message type."
