@@ -19,12 +19,13 @@ object VehicleFactory {
     */
   def buildVehicles(filename: String): List[Vehicle] = {
     val vehicleList = new ListBuffer[Vehicle]()
-
     val fileInputStream = this.getClass.getClassLoader.getResourceAsStream(filename)
+
     Source.fromInputStream(fileInputStream).getLines().foreach(line => {
       val statusList = new ListBuffer[VehicleStatus]()
       val statusArray = line.split(" ")
       val vehicleId = statusArray(0)
+
       statusArray.foreach(statusString => {
         val tokens = statusString.split(",")
         if (tokens.size >= 7) {
@@ -33,6 +34,7 @@ object VehicleFactory {
             tokens(5).toDouble, tokens(6).toDouble))
         }
       })
+
       vehicleList.append(new Vehicle(statusList.toList))
     })
 

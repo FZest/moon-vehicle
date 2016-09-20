@@ -8,7 +8,7 @@ package com.remark.media.exam.vehicle
   */
 object VehicleStarter {
   def main(args: Array[String]) {
-    val vehicleList = VehicleFactory.buildVehicles("vehicle")
+    val vehicleList = VehicleFactory.buildVehicles("vehicle.lines")
     vehicleList.foreach(vehicle => {
       vehicle.start()
     })
