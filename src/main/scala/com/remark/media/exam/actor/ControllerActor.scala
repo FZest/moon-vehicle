@@ -2,7 +2,7 @@ package com.remark.media.exam.actor
 
 import akka.actor.Actor
 import com.remark.media.exam.common.LocationUtils
-import com.remark.media.exam.controller.StatusShow
+import com.remark.media.exam.controller.{OperateType, StatusShow}
 import com.remark.media.exam.vehicle.VehicleStatus
 
 import scala.collection.mutable
@@ -27,12 +27,18 @@ class ControllerActor extends Actor {
   val delaySeconds = 2
 
   override def receive: Receive = {
+    // 接收来自月球车的状态信息
     case status: VehicleStatus => {
       val direction = status.direction + status.steeringAngle
       val moveDistance = status.speed * delaySeconds
       val predicateLocation = LocationUtils.predictLocation(status.currentLocation, direction, moveDistance)
 
       queue.enqueue(StatusShow(status.id, status.currentLocation, predicateLocation, direction))
+    }
+
+    // 接收定时调度信号，并打印月球车状态信息
+    case OperateType.PRINT => {
+      println(queue.dequeue())
     }
 
     case _ => "Wrong message type."
