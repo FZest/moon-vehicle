@@ -8,13 +8,14 @@ import java.text.DecimalFormat
   *
   * 月球车的状态信息
   *
+  * @param id              月球车ID
   * @param currentLocation 当前位置
   * @param destLocation    目标移动位置
   * @param direction       移动方向
   * @param speed           移动速度
   * @param steeringAngle   转向角度
   */
-case class VehicleStatus(currentLocation: VehicleLocation, destLocation: VehicleLocation,
+case class VehicleStatus(id: String, currentLocation: VehicleLocation, destLocation: VehicleLocation,
                          direction: Double, speed: Double, steeringAngle: Double = 0.0) {
   val formatter = new DecimalFormat("0.00")
 
@@ -22,6 +23,8 @@ case class VehicleStatus(currentLocation: VehicleLocation, destLocation: Vehicle
 
   override def toString(): String = {
     val content = new StringBuilder()
+    content.append(id)
+    content.append(separator)
     content.append(formatter.format(currentLocation.x))
     content.append(separator)
     content.append(formatter.format(currentLocation.y))

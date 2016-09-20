@@ -42,9 +42,9 @@ object RouterLineBuilder {
       Range(0, time).foreach(i => {
         val location = LocationUtils.predictLocation(curLocation, direction, speed * i)
         if (i == 0 && !first) {
-          statusList.add(VehicleStatus(location, nextLocation, direction, speed, direction - preDirection))
+          statusList.add(VehicleStatus("Vehicle_1", location, nextLocation, direction, speed, direction - preDirection))
         } else {
-          statusList.add(VehicleStatus(location, nextLocation, direction, speed, 0.0))
+          statusList.add(VehicleStatus("Vehicle_1", location, nextLocation, direction, speed, 0.0))
         }
       })
 

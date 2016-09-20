@@ -21,17 +21,19 @@ object VehicleFactory {
     val vehicleList = new ListBuffer[Vehicle]()
 
     val fileInputStream = this.getClass.getClassLoader.getResourceAsStream(filename)
-    var counter = 1
     Source.fromInputStream(fileInputStream).getLines().foreach(line => {
       val statusList = new ListBuffer[VehicleStatus]()
-      line.split(" ").foreach(statusString => {
+      val statusArray = line.split(" ")
+      val vehicleId = statusArray(0)
+      statusArray.foreach(statusString => {
         val tokens = statusString.split(",")
-        statusList.append(VehicleStatus(VehicleLocation(tokens(0).toDouble, tokens(1).toDouble),
-          VehicleLocation(tokens(2).toDouble, tokens(3).toDouble), tokens(4).toDouble,
-          tokens(5).toDouble, tokens(6).toDouble))
+        if (tokens.size >= 7) {
+          statusList.append(VehicleStatus(vehicleId, VehicleLocation(tokens(0).toDouble, tokens(1).toDouble),
+            VehicleLocation(tokens(2).toDouble, tokens(3).toDouble), tokens(4).toDouble,
+            tokens(5).toDouble, tokens(6).toDouble))
+        }
       })
-      vehicleList.append(new Vehicle("Vehicle_" + counter, statusList.toList))
-      counter = counter + 1
+      vehicleList.append(new Vehicle(statusList.toList))
     })
 
     vehicleList.toList

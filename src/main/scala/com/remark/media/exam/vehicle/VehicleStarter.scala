@@ -10,7 +10,7 @@ object VehicleStarter {
   def main(args: Array[String]) {
     val vehicleList = VehicleFactory.buildVehicles("vehicle")
     vehicleList.foreach(vehicle => {
-      vehicle.run()
+      vehicle.start()
     })
   }
 }
