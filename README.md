@@ -24,12 +24,12 @@
 `currentLocation.x,currentLocation.y,destLocation.x,destLocation.y,direction,speed,steeringAngle`
 
 由于每辆月球车需要模拟至少15分钟的移动路线，所以需要借助程序随机生成。  
-月球车路线随机生成程序请参考com.remark.media.exam.common.RouterLineBuilder
+月球车路线随机生成程序请参考`com.remark.media.exam.common.RouterLineBuilder`
 
-具体输入文件请参考src/main/resources/vehicle.lines
+具体输入文件请参考`src/main/resources/vehicle.lines`
 ## 月球车与控制中心通信
 因为会有很多辆月球车同时与控制中心通信，所以采用akka框架实现通信，每辆月球车和控制中心都是一个actor。
 ## 使用与运行
 将项目从github clone到本地后直接导入到IDE（Eclipse或者IDEA）中即可。  
-启动控制中心：运行com.remark.media.exam.main.ControllerStarter的main方法。  
-启动月球车：运行com.remark.media.exam.main.VehicleStarter的main方法。
+启动控制中心：运行`com.remark.media.exam.main.ControllerStarter`的main方法。  
+启动月球车：运行`com.remark.media.exam.main.VehicleStarter`的main方法。
