@@ -8,7 +8,14 @@
 * 移动速度（speed）：月球车每秒移动的距离。
 * 转向角度（steeringAngle）：当月球车遇到障碍物或者到达目的位置准备往下一个目的位置移动的时候，月球车需要在当前移动方向上顺时针旋转steeringAngle角度。
 
-地面控制中心需要每隔500毫秒打印一次月球车的报告位置与预测位置。
+月球车启动后，每秒会将当前位置信息发送给地面控制中心，而控制中心每隔500毫秒打印一次月球车的报告位置与预测位置。
+## 预测位置计算
+由于月球车与地面控制中心存在2秒的通信延迟，所以需要在报告位置的基础上预测2秒后的位置。  
+已知当前坐标curLocation，预计移动方向direction（=当前移动方向+转向角度），预计移动距离moveDistance（=移动速度*通信延迟）  
+计算预测坐标predictLocation的公式如下：  
+predictLocation.x = curLocation.x + moveDistance * Math.cos(direction)  
+predictLocation.y = curLocation.y + moveDistance * Math.sin(direction)  
+如果在通信延迟内月球车移动会超过目的位置，那么月球车应当在目的位置停下来，此时的预测位置应当是目的位置。
 ## 月球车路线输入文件
 每辆月球车的移动路线会预先设置好并保存在文件vehicle.lines中。  
 文件中每一行代表一辆月球车的移动线路，描述了在移动过程中每秒的位置信息，每行格式如下：  
