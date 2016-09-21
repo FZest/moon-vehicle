@@ -15,7 +15,8 @@
 计算预测坐标predictLocation的公式如下：  
 `predictLocation.x = curLocation.x + moveDistance * Math.cos(direction)`  
 `predictLocation.y = curLocation.y + moveDistance * Math.sin(direction)`  
-如果在通信延迟内月球车移动会超过目的位置，那么月球车应当在目的位置停下来，此时的预测位置应当是目的位置。
+如果在通信延迟内月球车移动会超过目的位置，那么月球车应当在目的位置停下来，此时的预测位置应当是目的位置。  
+还有其他相关的数据计算，具体的请参考`com.remark.media.exam.common.LocationUtils`。
 ## 月球车路线输入文件
 每辆月球车的移动路线会预先设置好并保存在文件vehicle.lines中。  
 文件中每一行代表一辆月球车的移动线路，描述了在移动过程中每秒的位置信息，每行格式如下：  
