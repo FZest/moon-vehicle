@@ -21,7 +21,10 @@ class ControllerActor extends Actor {
     */
   val queueMap = new mutable.HashMap[String, mutable.Queue[StatusShow]]()
 
-  val preStatusMap = new mutable.HashMap[String, StatusShow]()
+  /**
+    * 用于打印的所有月球车状态信息
+    */
+  val vehicleStatusMap = new mutable.HashMap[String, StatusShow]()
 
   /**
     * 月球车与地面控制中心的通信延迟（秒）
@@ -58,7 +61,7 @@ class ControllerActor extends Actor {
     // 接收定时调度信号，并打印月球车状态信息
     case OperateType.PRINT => {
       val showContent = new StringBuilder()
-      val seperator = "\t"
+      val seperator = "\n"
 
       queueMap.foreach(entry => {
         // 获取月球车ID与队列
@@ -66,22 +69,19 @@ class ControllerActor extends Actor {
         val queue = entry._2
 
         if (!queue.isEmpty) {
-          // 从队列中获取状态信息
-          val statusShow = queue.dequeue()
-          preStatusMap.put(id, statusShow)
+          // 从队列中获取新的月球车状态信息并更新到本地
+          vehicleStatusMap.put(id, queue.dequeue())
+        }
 
-          showContent.append(statusShow)
+        if (!vehicleStatusMap.get(id).isEmpty) {
+          showContent.append(vehicleStatusMap.get(id).get)
           showContent.append(seperator)
-        } else {
-          // 无法从队列中获取状态信息，则将打印上次的状态
-          if (!preStatusMap.get(id).isEmpty) {
-            showContent.append(preStatusMap.get(id).get)
-            showContent.append(seperator)
-          }
         }
       })
 
-      println(showContent)
+      if (!showContent.isEmpty) {
+        println(showContent)
+      }
     }
 
     case _ => sender ! Response(ResponseCode.ERROR, "Wrong message type.")
