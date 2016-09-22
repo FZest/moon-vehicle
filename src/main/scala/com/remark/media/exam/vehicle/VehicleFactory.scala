@@ -39,7 +39,7 @@ object VehicleFactory {
         }
       })
 
-      vehicleList.append(new Vehicle(statusList.toList, system.actorOf(Props[VehicleActor], vehicleId)))
+      vehicleList.append(new Vehicle(statusList.toList, system.actorOf(Props[VehicleActor], vehicleId), system))
     })
 
     vehicleList.toList

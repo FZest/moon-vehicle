@@ -1,8 +1,11 @@
 package com.remark.media.exam.vehicle
 
-import akka.actor.ActorRef
+import akka.actor.{ActorRef, ActorSystem, Cancellable}
+import com.remark.media.exam.common.OperateType
 
-import scala.util.control.Breaks._
+import scala.collection.mutable.ListBuffer
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 
 /**
   * User: 邓思 
@@ -11,30 +14,30 @@ import scala.util.control.Breaks._
   * 月球车
   *
   * @param statusList 月球车每秒的状态信息列表，也就是预置的运行线路
-  * @param actor      actor
+  * @param actor      actor ref
+  * @param system     actor system
   */
-class Vehicle(statusList: List[VehicleStatus], actor: ActorRef) extends Thread {
-  var moving = true
+class Vehicle(statusList: List[VehicleStatus], actor: ActorRef, system: ActorSystem) extends Thread {
+  val cancellableList = new ListBuffer[Cancellable]
 
   /**
     * 移动月球车
     */
   override def run() = {
+    // 将预置路线发送给vehicle actor
     statusList.foreach(status => {
-      // 这里是异步调用，暂时不处理来自控制中心的响应
       actor ! status
-      Thread.sleep(1000)
-
-      if (!moving) {
-        break
-      }
     })
+
+    cancellableList.append(system.scheduler.schedule(0 milliseconds, 1000 milliseconds, actor, OperateType.SEND))
   }
 
   /**
     * 停止移动月球车
     */
   def shutdown() = {
-    moving = false
+    cancellableList.foreach(cancellable => {
+      cancellable.cancel()
+    })
   }
 }

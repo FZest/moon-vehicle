@@ -2,6 +2,7 @@ package com.remark.media.exam.controller
 
 import akka.actor.{ActorSystem, Cancellable, Props}
 import com.remark.media.exam.actor.ControllerActor
+import com.remark.media.exam.common.OperateType
 import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global

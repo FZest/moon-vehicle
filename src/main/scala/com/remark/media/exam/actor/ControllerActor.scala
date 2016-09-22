@@ -1,8 +1,8 @@
 package com.remark.media.exam.actor
 
 import akka.actor.Actor
-import com.remark.media.exam.common.{LocationUtils, Response, ResponseCode}
-import com.remark.media.exam.controller.{OperateType, StatusShow}
+import com.remark.media.exam.common.{LocationUtils, OperateType, Response, ResponseCode}
+import com.remark.media.exam.controller.StatusShow
 import com.remark.media.exam.vehicle.{VehicleLocation, VehicleStatus}
 
 import scala.collection.mutable
