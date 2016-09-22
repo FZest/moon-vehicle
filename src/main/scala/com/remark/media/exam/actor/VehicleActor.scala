@@ -1,6 +1,6 @@
 package com.remark.media.exam.actor
 
-import akka.actor.{Actor, ActorRef, ActorSelection}
+import akka.actor.{Actor, ActorSelection}
 import com.remark.media.exam.common.{OperateType, Response, ResponseCode}
 import com.remark.media.exam.vehicle.VehicleStatus
 
@@ -17,8 +17,6 @@ class VehicleActor extends Actor {
 
   var remoteActor: ActorSelection = null
 
-  var localActor: ActorRef = null
-
   override def preStart(): Unit = {
     remoteActor = context.actorSelection("akka.tcp://controller@127.0.0.1:10000/user/controller")
   }
@@ -26,13 +24,12 @@ class VehicleActor extends Actor {
   override def receive: Receive = {
     // 将预置路线中的各个状态信息存储到队列
     case status: VehicleStatus => {
-      localActor = sender()
       queue.enqueue(status)
     }
 
     // 接收来自控制中心的响应消息
     case response: Response => {
-      localActor ! response
+      //      println(response)
     }
 
     // 处理定时调度信号，并从队列中取出状态信息发送给控制中心
