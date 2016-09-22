@@ -1,7 +1,7 @@
 package com.remark.media.exam.vehicle
 
 import akka.actor.{ActorRef, ActorSystem, Cancellable}
-import com.remark.media.exam.common.OperateType
+import com.remark.media.exam.common.ScheduleType
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -29,7 +29,7 @@ class Vehicle(statusList: List[VehicleStatus], actor: ActorRef, system: ActorSys
       actor ! status
     })
 
-    cancellableList.append(system.scheduler.schedule(0 milliseconds, 1000 milliseconds, actor, OperateType.SEND))
+    cancellableList.append(system.scheduler.schedule(0 milliseconds, 1000 milliseconds, actor, ScheduleType.SEND))
   }
 
   /**

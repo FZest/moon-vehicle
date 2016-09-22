@@ -2,7 +2,7 @@ package com.remark.media.exam.controller
 
 import akka.actor.{ActorSystem, Cancellable, Props}
 import com.remark.media.exam.actor.ControllerActor
-import com.remark.media.exam.common.OperateType
+import com.remark.media.exam.common.ScheduleType
 import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -21,7 +21,7 @@ class Controller {
 
   def start() = {
     val controllerActor = system.actorOf(Props[ControllerActor], "controller")
-    cancellable = system.scheduler.schedule(0 milliseconds, 500 milliseconds, controllerActor, OperateType.PRINT)
+    cancellable = system.scheduler.schedule(0 milliseconds, 500 milliseconds, controllerActor, ScheduleType.PRINT)
   }
 
   def stop() = {

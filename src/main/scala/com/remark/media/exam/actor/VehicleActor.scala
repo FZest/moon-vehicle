@@ -1,7 +1,7 @@
 package com.remark.media.exam.actor
 
 import akka.actor.{Actor, ActorSelection}
-import com.remark.media.exam.common.{OperateType, Response, ResponseCode}
+import com.remark.media.exam.common.{Response, ResponseCode, ScheduleType}
 import com.remark.media.exam.vehicle.VehicleStatus
 
 import scala.collection.mutable
@@ -33,7 +33,7 @@ class VehicleActor extends Actor {
     }
 
     // 处理定时调度信号，并从队列中取出状态信息发送给控制中心
-    case OperateType.SEND => {
+    case ScheduleType.SEND => {
       controllerActor ! queue.dequeue()
     }
 
