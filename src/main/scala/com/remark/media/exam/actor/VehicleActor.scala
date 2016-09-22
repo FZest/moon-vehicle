@@ -15,10 +15,10 @@ import scala.collection.mutable
 class VehicleActor extends Actor {
   val queue = new mutable.Queue[VehicleStatus]()
 
-  var remoteActor: ActorSelection = null
+  var controllerActor: ActorSelection = null
 
   override def preStart(): Unit = {
-    remoteActor = context.actorSelection("akka.tcp://controller@127.0.0.1:10000/user/controller")
+    controllerActor = context.actorSelection("akka.tcp://controller@127.0.0.1:10000/user/controller")
   }
 
   override def receive: Receive = {
@@ -34,7 +34,7 @@ class VehicleActor extends Actor {
 
     // 处理定时调度信号，并从队列中取出状态信息发送给控制中心
     case OperateType.SEND => {
-      remoteActor ! queue.dequeue()
+      controllerActor ! queue.dequeue()
     }
 
     case _ => sender ! Response(ResponseCode.ERROR, "Wrong message type.")
