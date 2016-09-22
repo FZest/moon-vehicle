@@ -16,10 +16,12 @@ import scala.collection.mutable
 class ControllerActor extends Actor {
   /**
     * 地面控制中心将接收到的月球车状态信息进行位置预测
-    * 然后将结果放置到此队列中
-    * 以便定时任务输出各个月球车的状态信息
+    * 然后将结果放置到队列中
+    * 一辆月球车对应一个队列
     */
-  val queue = new mutable.Queue[StatusShow]()
+  val queueMap = new mutable.HashMap[String, mutable.Queue[StatusShow]]()
+
+  val preStatusMap = new mutable.HashMap[String, StatusShow]()
 
   /**
     * 月球车与地面控制中心的通信延迟（秒）
@@ -41,15 +43,45 @@ class ControllerActor extends Actor {
         predicateLocation = LocationUtils.predictLocation(status.currentLocation, direction, moveDistance)
       }
 
+      var queue: mutable.Queue[StatusShow] = null
+      if (queueMap.get(status.id).isEmpty) {
+        queue = new mutable.Queue[StatusShow]()
+        queueMap.put(status.id, queue)
+      } else {
+        queue = queueMap.get(status.id).get
+      }
+
       queue.enqueue(StatusShow(status.id, status.currentLocation, predicateLocation, direction))
       sender ! Response(ResponseCode.OK)
     }
 
     // 接收定时调度信号，并打印月球车状态信息
     case OperateType.PRINT => {
-      if (!queue.isEmpty) {
-        println(queue.dequeue())
-      }
+      val showContent = new StringBuilder()
+      val seperator = "\t"
+
+      queueMap.foreach(entry => {
+        // 获取月球车ID与队列
+        val id = entry._1
+        val queue = entry._2
+
+        if (!queue.isEmpty) {
+          // 从队列中获取状态信息
+          val statusShow = queue.dequeue()
+          preStatusMap.put(id, statusShow)
+
+          showContent.append(statusShow)
+          showContent.append(seperator)
+        } else {
+          // 无法从队列中获取状态信息，则将打印上次的状态
+          if (!preStatusMap.get(id).isEmpty) {
+            showContent.append(preStatusMap.get(id).get)
+            showContent.append(seperator)
+          }
+        }
+      })
+
+      println(showContent)
     }
 
     case _ => sender ! Response(ResponseCode.ERROR, "Wrong message type.")
